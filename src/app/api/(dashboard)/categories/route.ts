@@ -6,6 +6,7 @@ import { Types } from "mongoose";
 import User from "@/lib/models/user";
 const ObjectId=require('mongodb').ObjectId
 import CategorySchema from "@/lib/models/category";
+import { futimesSync } from "fs";
 
 export async function POST(req:Request) {
     try {
@@ -36,4 +37,29 @@ export async function POST(req:Request) {
             status:500
         })
     }
+}
+
+export async function GET(req:Request){
+      try {
+         const {searchParams}=new URL(req.url)
+         const userId=searchParams.get('userId')
+         if(!userId){
+           return NextResponse.json({
+             error:"Missing userId",
+             status:400
+           })
+         }
+         const categories=await CategorySchema.find({
+          user:new Types.ObjectId(userId)
+        })
+        return NextResponse.json({
+          categories,
+          status:200
+        })
+      } catch (error) {
+         return NextResponse.json({
+             error:error,
+             status:500
+         })
+      }
 }

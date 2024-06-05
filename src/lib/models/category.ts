@@ -12,5 +12,4 @@ const Category=new mongoose.Schema({
 })
 
 const CaregotySchema=mongoose.models.Category || mongoose.model('Category',Category)
-
 export default CaregotySchema
